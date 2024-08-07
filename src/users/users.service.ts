@@ -1,15 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private uRepository: Repository<User>) {}
 
-  createUser(createUser: CreateUserDto) {
+  async createUser(createUser: CreateUserDto) {
+    const userFound = await this.uRepository.findOne({
+      where: {
+        usuario: createUser.usuario,
+      },
+    });
+
+    if (userFound) {
+      return new HttpException('User already exist', HttpStatus.CONFLICT);
+    }
+    console.log(userFound);
+
     const newUser = this.uRepository.create(createUser);
     return this.uRepository.save(newUser);
   }
@@ -18,19 +28,43 @@ export class UsersService {
     return this.uRepository.find();
   }
 
-  getUser(id: number) {
-    return this.uRepository.findOne({
+  async getUser(id: number) {
+    const userFound = await this.uRepository.findOne({
       where: {
         id_usuario: id,
       },
     });
+
+    if (!userFound) {
+      return new HttpException('User not found', HttpStatus.NOT_FOUND);
+    } else {
+      return userFound;
+    }
   }
 
-  updateUser(id: number, updateUserDto: UpdateUserDto) {
-    return this.uRepository.update(id, updateUserDto);
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    const userFound = await this.uRepository.findOne({
+      where: {
+        id_usuario: id,
+      },
+    });
+
+    if (!userFound) {
+      return new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const updateUser = Object.assign(userFound, updateUserDto);
+
+    return this.uRepository.save(updateUser);
   }
 
-  removeUser(id: number) {
-    return this.uRepository.delete(id);
+  async removeUser(id: number) {
+    const resultDel = await this.uRepository.delete(id);
+
+    if (resultDel.affected === 0) {
+      return new HttpException('User not found to delete', HttpStatus.NOT_FOUND);
+    } else {
+      return resultDel;
+    }
   }
 }
