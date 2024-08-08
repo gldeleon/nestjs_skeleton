@@ -10,7 +10,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUser: CreateUserDto): Promise<User> {
+  create(@Body() createUser: CreateUserDto) {
     return this.usersService.createUser(createUser);
   }
 
@@ -20,17 +20,17 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.getUser(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<UpdateResult> {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.updateUser(+id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<DeleteResult> {
+  remove(@Param('id') id: string) {
     return this.usersService.removeUser(+id);
   }
 }
