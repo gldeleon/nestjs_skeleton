@@ -15,7 +15,7 @@ import { UsersModule } from './users/users.module';
       password: '90k%]cbY{1@CxQZ',
       database: 'ema_db',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: false,
+      synchronize: true,
     }),
     ItemsModule,
     UsersModule,

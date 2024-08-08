@@ -33,4 +33,8 @@ export class UsersService {
   removeUser(id: number) {
     return this.uRepository.delete(id);
   }
+
+  createProfile(){
+    
+  }
 }

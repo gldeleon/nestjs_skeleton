@@ -5,9 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Profile } from './profile.entity';
 
-@Entity({ name: 'usuario' })
+@Entity({ name: 'user' })
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_usuario: number;
@@ -25,4 +28,8 @@ export class User extends BaseEntity {
     default: true,
   })
   registro_activo: boolean;
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile: Profile
 }
+ 
