@@ -18,14 +18,14 @@ import {
     @Column()
     surename: string;
     @Column()
-    age: string;
+    age?: number;
     @CreateDateColumn()
-    fecha_alta: Date;
+    fecha_alta?: Date;
     @UpdateDateColumn()
-    fecha_modificacion: Date;
+    fecha_modificacion?: Date;
     @Column({
       default: true,
     })
-    registro_activo: boolean;
+    registro_activo?: boolean;
   }
   
